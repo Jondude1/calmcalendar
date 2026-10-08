@@ -102,10 +102,22 @@ input[type="checkbox"], input[type="radio"] { width: 24px; height: 24px; accent-
   .cal-grid th .short { display: inline; }
 }
 
+.site-footer {
+  text-align: center;
+  padding: 1.25rem 1rem 2rem;
+  color: #6b6257;
+  font-size: 0.95rem;
+}
+.site-footer a { color: #b3541e; }
+
+.freebie-list { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+.freebie-list li { margin: 0.4rem 0; }
+.freebie-list a { font-weight: 600; }
+
 @media print {
   html { font-size: 16px; }
   body { background: #fff; }
-  .app-header, .controls, .preview-label { display: none !important; }
+  .app-header, .controls, .preview-label, .site-footer { display: none !important; }
   .layout { display: block; padding: 0; }
   .paper-scroll { overflow: visible; padding: 0; }
   .paper, .paper.portrait, .paper.landscape { width: auto; min-height: 0; border: 0; box-shadow: none; padding: 0; margin: 0; }
@@ -157,6 +169,15 @@ input[type="checkbox"], input[type="radio"] { width: 24px; height: 24px; accent-
       <button type="button" id="print-btn" class="btn primary big">Print / Save as PDF</button>
       <p class="hint">In the print window, choose “Save as PDF” as the printer to make a PDF file.</p>
       <p class="hint saved-note" id="saved-note">Your activity choices are remembered on this computer only.</p>
+    </div>
+
+    <div class="card">
+      <h2>Free printables for your residents</h2>
+      <p class="hint">Large-print puzzles and activity pages, no signup needed.</p>
+      <ul class="freebie-list">
+        <li><a href="freebies/free-autumn-word-search.pdf">Autumn Word Search (PDF)</a></li>
+        <li><a href="freebies/sample-activity-pack-seniors.pdf">Senior Activity Sampler Pack (PDF)</a></li>
+      </ul>
     </div>
   </section>
 
@@ -663,5 +684,10 @@ if (typeof document !== 'undefined') init();
 
 })();
 </script>
+<footer class="site-footer">
+  <p>CalmCalendar is free forever. Made by
+    <a href="https://www.etsy.com/shop/PrintablePastimesCo">PrintablePastimesCo</a>
+    — printable activity books &amp; puzzles for seniors.</p>
+</footer>
 </body>
 </html>
