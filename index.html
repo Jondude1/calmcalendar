@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CalmCalendar — Large-Print Activity Calendars</title>
+<style>
+:root {
+  --bg: #fbf6ee;
+  --card: #ffffff;
+  --ink: #2b2118;
+  --muted: #5e5043;
+  --line: #e3d6c3;
+  --accent: #a8481f;
+  --accent-dark: #843714;
+  --accent-soft: #fbe9dc;
+  --focus: #1c5fa8;
+  --font: "Segoe UI", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --serif: Georgia, "Times New Roman", serif;
+}
+* { box-sizing: border-box; }
+html { font-size: 18px; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font); line-height: 1.45;
+}
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.app-header { background: var(--card); border-bottom: 4px solid var(--accent); padding: 18px 28px; }
+.brand h1 { margin: 0; font-family: var(--serif); font-size: 2rem; color: var(--accent-dark); letter-spacing: 0.01em; }
+.brand p { margin: 2px 0 0; color: var(--muted); }
+
+.layout { display: grid; grid-template-columns: minmax(340px, 460px) 1fr; gap: 24px; padding: 24px 28px 48px; align-items: start; }
+@media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(80, 55, 30, 0.08); }
+.card h2 { margin: 0 0 10px; font-size: 1.2rem; font-family: var(--serif); }
+.hint { color: var(--muted); font-size: 0.88rem; margin: 8px 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.row.buttons { margin-top: 14px; }
+
+label { font-weight: 600; }
+select, input[type="text"], input[type="number"] {
+  font: inherit; color: var(--ink); background: #fff; border: 2px solid #b9a78f; border-radius: 8px;
+  padding: 8px 10px; min-height: 46px;
+}
+input[type="number"] { width: 6.5rem; }
+select:focus, input:focus, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+input[type="checkbox"], input[type="radio"] { width: 24px; height: 24px; accent-color: var(--accent); flex: none; }
+
+.btn { font: inherit; font-weight: 700; border-radius: 10px; border: 2px solid var(--accent); min-height: 48px; padding: 8px 18px; cursor: pointer; }
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.btn.secondary { background: var(--accent-soft); color: var(--accent-dark); }
+.btn.secondary:hover { background: #f6d9c4; }
+.btn.ghost { background: transparent; color: var(--muted); border-color: var(--line); }
+.btn.ghost:hover { background: #f5ede1; }
+.btn.small { min-height: 40px; padding: 4px 10px; font-size: 0.85rem; }
+.btn.big { width: 100%; font-size: 1.15rem; min-height: 56px; margin-top: 10px; }
+
+.orientation { border: 0; padding: 0; margin: 0; gap: 22px; }
+.orientation label { display: flex; align-items: center; gap: 8px; }
+
+.activity { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #fffdf9; }
+.activity.off { opacity: 0.6; }
+.activity-top { display: flex; gap: 8px; align-items: center; }
+.activity-top .name { flex: 1 1 auto; min-width: 0; font-weight: 700; }
+.activity-top .time { width: 8rem; flex: none; }
+.activity-rule { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.rule-body { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rule-body input[type="text"] { min-width: 14rem; }
+.chip { cursor: pointer; }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.chip span { display: inline-block; min-width: 50px; min-height: 44px; line-height: 40px; text-align: center; border: 2px solid #b9a78f; border-radius: 8px; background: #fff; font-size: 0.85rem; }
+.chip input:checked + span { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.preview-label { margin: 0 0 8px; font-family: var(--serif); font-size: 1.2rem; }
+.paper-scroll { overflow-x: auto; padding-bottom: 8px; }
+.paper { background: #fff; border: 1px solid var(--line); box-shadow: 0 3px 14px rgba(80, 55, 30, 0.18); padding: 0.4in; margin: 0 auto; color: #000; }
+.paper.portrait { width: 8.5in; min-height: 11in; }
+.paper.landscape { width: 11in; min-height: 8.5in; }
+
+.cal-title { text-align: center; font-family: var(--serif); font-size: 30pt; margin: 0 0 12px; color: #000; }
+.cal-grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.cal-grid th { background: #3b2a1c; color: #fff; font-size: 14pt; padding: 6px 2px; border: 2px solid #000; }
+.cal-grid th .short { display: none; }
+.cal-grid td { border: 2px solid #000; vertical-align: top; padding: 4px 5px 6px; height: 1.3in; overflow-wrap: anywhere; }
+.paper.landscape .cal-grid td { height: 0.95in; }
+.cal-grid td.empty { background: #f1ebe2; }
+.cal-grid td.holiday { background: #fff3d6; }
+.day-num { font-size: 16pt; font-weight: 800; line-height: 1.1; }
+.holiday-name { font-size: 14pt; font-weight: 800; color: #7a1f0c; line-height: 1.15; margin: 2px 0; }
+.acts { list-style: none; margin: 4px 0 0; padding: 0; }
+.act { font-size: 14pt; line-height: 1.2; margin: 0 0 5px; padding-top: 3px; border-top: 1px solid #b9a78f; font-weight: 600; }
+.act:first-child { border-top: 0; padding-top: 0; }
+.act-time { font-weight: 800; display: block; }
+.cal-grid tr { break-inside: avoid; page-break-inside: avoid; }
+
+@media (max-width: 700px) {
+  .cal-grid th .long { display: none; }
+  .cal-grid th .short { display: inline; }
+}
+
+@media print {
+  html { font-size: 16px; }
+  body { background: #fff; }
+  .app-header, .controls, .preview-label { display: none !important; }
+  .layout { display: block; padding: 0; }
+  .paper-scroll { overflow: visible; padding: 0; }
+  .paper, .paper.portrait, .paper.landscape { width: auto; min-height: 0; border: 0; box-shadow: none; padding: 0; margin: 0; }
+  .cal-grid th { background: #fff !important; color: #000; }
+  .cal-grid td.empty { background: #fff; }
+  .cal-grid td.holiday { background: #fff; }
+  .cal-grid td { height: 1.15in; }
+  .paper.landscape .cal-grid td { height: 0.85in; }
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="brand">
+    <h1>CalmCalendar</h1>
+    <p>Large-print monthly activity calendars. Free, private, works offline.</p>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="controls" aria-label="Calendar settings">
+    <div class="card">
+      <h2>1. Choose the month</h2>
+      <div class="row">
+        <label for="month-select">Month</label>
+        <select id="month-select"></select>
+        <label for="year-input">Year</label>
+        <input id="year-input" type="number" min="1900" max="2200" step="1">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2. Pick your activities</h2>
+      <p class="hint">Tick the activities you offer. Change the time or schedule on any of them.</p>
+      <div id="activity-list"></div>
+      <div class="row buttons">
+        <button type="button" id="add-activity" class="btn secondary">+ Add custom activity</button>
+        <button type="button" id="reset-activities" class="btn ghost">Reset to defaults</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Print or save</h2>
+      <fieldset class="row orientation">
+        <legend class="sr-only">Page orientation</legend>
+        <label><input type="radio" name="orientation" value="portrait"> Portrait</label>
+        <label><input type="radio" name="orientation" value="landscape"> Landscape</label>
+      </fieldset>
+      <button type="button" id="print-btn" class="btn primary big">Print / Save as PDF</button>
+      <p class="hint">In the print window, choose “Save as PDF” as the printer to make a PDF file.</p>
+      <p class="hint saved-note" id="saved-note">Your activity choices are remembered on this computer only.</p>
+    </div>
+  </section>
+
+  <section class="preview" aria-label="Calendar preview">
+    <h2 class="preview-label">Live preview</h2>
+    <div class="paper-scroll">
+      <div id="paper" class="paper portrait" aria-live="polite"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+'use strict';
+// Date math, US federal holidays, recurrence expansion and calendar rendering.
+// Pure functions only: no DOM or storage access, so everything is testable in Node.
+// Months are 0-based (0 = January) throughout, matching the JS Date API.
+
+const WEEKDAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+  'August', 'September', 'October', 'November', 'December'];
+const ORDINALS = { 1: '1st', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', '-1': 'Last' };
+
+const DENSE_THRESHOLD = 4;
+
+function pad(n) {
+  return String(n).padStart(2, '0');
+}
+
+function isoDate(year, month, day) {
+  return `${year}-${pad(month + 1)}-${pad(day)}`;
+}
+
+function daysInMonth(year, month) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+// Weekday (0 = Sunday) of a given date.
+function weekdayOf(year, month, day) {
+  return new Date(year, month, day).getDay();
+}
+
+// Day of month of the nth given weekday. n = -1 means the last one. Returns null if absent (e.g. a 5th Friday).
+function nthWeekday(year, month, weekday, n) {
+  const dim = daysInMonth(year, month);
+  if (n > 0) {
+    const first = ((weekday - weekdayOf(year, month, 1) + 7) % 7) + 1;
+    const day = first + 7 * (n - 1);
+    return day <= dim ? day : null;
+  }
+  if (n === -1) {
+    return dim - ((weekdayOf(year, month, dim) - weekday + 7) % 7);
+  }
+  return null;
+}
+
+// Rows of 7 cells (Sunday first); null pads days outside the month.
+function monthGrid(year, month) {
+  const offset = weekdayOf(year, month, 1);
+  const dim = daysInMonth(year, month);
+  const cells = [];
+  for (let i = 0; i < offset; i++) cells.push(null);
+  for (let d = 1; d <= dim; d++) cells.push(d);
+  while (cells.length % 7 !== 0) cells.push(null);
+  const weeks = [];
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+  return weeks;
+}
+
+// US federal holidays for a year, sorted by date: [{ date: 'YYYY-MM-DD', name }].
+// Fixed-date holidays are shown on their actual date (no weekend "observed" shift).
+function usHolidays(year) {
+  const fixed = (m, d, name) => ({ date: isoDate(year, m, d), name });
+  const nth = (m, wd, n, name) => ({ date: isoDate(year, m, nthWeekday(year, m, wd, n)), name });
+  return [
+    fixed(0, 1, "New Year's Day"),
+    nth(0, 1, 3, 'Martin Luther King Jr. Day'),
+    nth(1, 1, 3, "Presidents' Day"),
+    nth(4, 1, -1, 'Memorial Day'),
+    fixed(5, 19, 'Juneteenth'),
+    fixed(6, 4, 'Independence Day'),
+    nth(8, 1, 1, 'Labor Day'),
+    nth(9, 1, 2, 'Columbus Day'),
+    fixed(10, 11, 'Veterans Day'),
+    nth(10, 4, 4, 'Thanksgiving'),
+    fixed(11, 25, 'Christmas Day'),
+  ].sort((a, b) => a.date.localeCompare(b.date));
+}
+
+// Holidays in one month as a { dayOfMonth: name } map.
+function holidaysInMonth(year, month) {
+  const prefix = `${year}-${pad(month + 1)}-`;
+  const map = {};
+  for (const h of usHolidays(year)) {
+    if (h.date.startsWith(prefix)) map[Number(h.date.slice(8))] = h.name;
+  }
+  return map;
+}
+
+// Expand a recurrence rule into the sorted, unique day-of-month numbers it hits in a month.
+// Rule shapes:
+//   { type: 'weekly',  days: [1, 3, 5] }          weekdays, 0 = Sunday
+//   { type: 'monthly', nth: 2, weekday: 2 }       nth weekday; nth = -1 for last
+//   { type: 'dates',   dates: ['2027-03-17'] }    specific ISO dates
+function expandRule(rule, year, month) {
+  const days = new Set();
+  if (!rule) return [];
+  const dim = daysInMonth(year, month);
+  if (rule.type === 'weekly') {
+    const wanted = new Set(rule.days || []);
+    for (let d = 1; d <= dim; d++) if (wanted.has(weekdayOf(year, month, d))) days.add(d);
+  } else if (rule.type === 'monthly') {
+    const d = nthWeekday(year, month, rule.weekday, rule.nth);
+    if (d) days.add(d);
+  } else if (rule.type === 'dates') {
+    const prefix = `${year}-${pad(month + 1)}-`;
+    for (const iso of rule.dates || []) {
+      if (typeof iso === 'string' && iso.startsWith(prefix)) {
+        const d = Number(iso.slice(8, 10));
+        if (d >= 1 && d <= dim) days.add(d);
+      }
+    }
+  }
+  return [...days].sort((a, b) => a - b);
+}
+
+// Minutes after midnight for "2:00 PM" style times; Infinity when unparseable (sorts last).
+function parseTime(text) {
+  const m = /^\s*(\d{1,2})(?::(\d{2}))?\s*([ap])\.?\s*m?\.?\s*$/i.exec(text || '');
+  if (!m) return Infinity;
+  let h = Number(m[1]) % 12;
+  const min = Number(m[2] || 0);
+  if (min > 59 || Number(m[1]) > 12 || Number(m[1]) < 1) return Infinity;
+  if (m[3].toLowerCase() === 'p') h += 12;
+  return h * 60 + min;
+}
+
+// Human-readable summary of a rule, e.g. "Mon, Wed, Fri" or "2nd Tuesday".
+function describeRule(rule) {
+  if (!rule) return '';
+  if (rule.type === 'weekly') {
+    const days = [...(rule.days || [])].sort((a, b) => a - b);
+    return days.length ? days.map((d) => WEEKDAY_SHORT[d]).join(', ') : 'No days chosen';
+  }
+  if (rule.type === 'monthly') return `${ORDINALS[rule.nth] || ''} ${WEEKDAY_NAMES[rule.weekday] || ''}`.trim();
+  if (rule.type === 'dates') {
+    const n = (rule.dates || []).length;
+    return n === 1 ? '1 specific date' : `${n} specific dates`;
+  }
+  return '';
+}
+
+// Build the month model: weeks of cells { day, iso, holiday, dense, items: [{ id, name, time }] }.
+// Items on a day are sorted by time, then name; nothing is ever dropped or truncated.
+function buildMonthModel(year, month, activities) {
+  const holidays = holidaysInMonth(year, month);
+  const byDay = {};
+  for (const act of activities || []) {
+    if (act.enabled === false) continue;
+    for (const d of expandRule(act.rule, year, month)) {
+      (byDay[d] = byDay[d] || []).push({ id: act.id, name: act.name, time: act.time || '' });
+    }
+  }
+  const weeks = monthGrid(year, month).map((week) => week.map((day) => {
+    if (day === null) return null;
+    const items = (byDay[day] || []).sort((a, b) =>
+      parseTime(a.time) - parseTime(b.time) || a.name.localeCompare(b.name));
+    return { day, iso: isoDate(year, month, day), holiday: holidays[day] || '', items, dense: items.length > DENSE_THRESHOLD };
+  }));
+  return { year, month, title: `${MONTH_NAMES[month]} ${year}`, weeks };
+}
+
+function escapeHtml(text) {
+  return String(text).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Render the month model to HTML. Cells size by content (no fixed heights), so crowded days grow
+// taller rather than overlapping or clipping.
+function renderMonthHtml(model) {
+  const head = WEEKDAY_NAMES.map((n, i) =>
+    `<th scope="col"><span class="long">${n}</span><span class="short">${WEEKDAY_SHORT[i]}</span></th>`).join('');
+  const rows = model.weeks.map((week) => {
+    const cells = week.map((cell) => {
+      if (!cell) return '<td class="empty"></td>';
+      const cls = ['day'];
+      if (cell.holiday) cls.push('holiday');
+      if (cell.dense) cls.push('dense');
+      const holiday = cell.holiday ? `<div class="holiday-name">${escapeHtml(cell.holiday)}</div>` : '';
+      const items = cell.items.map((it) =>
+        `<li class="act">${it.time ? `<span class="act-time">${escapeHtml(it.time)}</span> ` : ''}` +
+        `<span class="act-name">${escapeHtml(it.name)}</span></li>`).join('');
+      return `<td class="${cls.join(' ')}" data-date="${cell.iso}"><div class="day-num">${cell.day}</div>` +
+        `${holiday}${items ? `<ul class="acts">${items}</ul>` : ''}</td>`;
+    }).join('');
+    return `<tr>${cells}</tr>`;
+  }).join('');
+  return `<h2 class="cal-title">${escapeHtml(model.title)}</h2>` +
+    `<table class="cal-grid"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+// Default activities, custom activity CRUD and localStorage persistence.
+// Storage is injected (anything with getItem/setItem) so the logic runs in Node tests too.
+
+const STORAGE_KEY = 'calmcalendar.v1';
+
+const weekly = (...days) => ({ type: 'weekly', days });
+const monthly = (nth, weekday) => ({ type: 'monthly', nth, weekday });
+
+// 12 sensible defaults. All are enabled on first run; directors untick what they don't offer.
+function defaultActivities() {
+  const defs = [
+    ['Bingo', '2:00 PM', weekly(2, 4)],
+    ['Morning Exercise', '9:30 AM', weekly(1, 3, 5)],
+    ['Arts & Crafts', '10:30 AM', weekly(3)],
+    ['Movie Afternoon', '2:30 PM', weekly(5)],
+    ['Music & Memories', '3:00 PM', weekly(1)],
+    ['Devotions', '10:00 AM', weekly(0)],
+    ['Card Games', '1:30 PM', weekly(2)],
+    ['Trivia', '3:00 PM', weekly(4)],
+    ['Walking Club', '9:00 AM', weekly(2, 4)],
+    ['Outing Day', '10:00 AM', monthly(2, 3)],
+    ['Birthday Celebrations', '2:00 PM', monthly(-1, 5)],
+    ['Manicures', '11:00 AM', monthly(2, 2)],
+  ];
+  return defs.map(([name, time, rule], i) => ({
+    id: `default-${i + 1}`, name, time, rule, enabled: true, custom: false,
+  }));
+}
+
+let counter = 0;
+function newId() {
+  counter += 1;
+  return `custom-${Date.now().toString(36)}-${counter}`;
+}
+
+function createActivity(activities, fields = {}) {
+  const act = {
+    id: newId(),
+    name: fields.name || 'New activity',
+    time: fields.time || '2:00 PM',
+    rule: fields.rule || weekly(1),
+    enabled: true,
+    custom: true,
+  };
+  return [...activities, act];
+}
+
+function updateActivity(activities, id, changes) {
+  return activities.map((a) => (a.id === id ? { ...a, ...changes, id: a.id } : a));
+}
+
+function deleteActivity(activities, id) {
+  return activities.filter((a) => a.id !== id);
+}
+
+function validRule(rule) {
+  if (!rule || typeof rule !== 'object') return false;
+  if (rule.type === 'weekly') return Array.isArray(rule.days) && rule.days.every((d) => d >= 0 && d <= 6);
+  if (rule.type === 'monthly') return rule.weekday >= 0 && rule.weekday <= 6 && [1, 2, 3, 4, 5, -1].includes(rule.nth);
+  if (rule.type === 'dates') return Array.isArray(rule.dates);
+  return false;
+}
+
+function sanitize(list) {
+  return list
+    .filter((a) => a && typeof a.id === 'string' && typeof a.name === 'string' && validRule(a.rule))
+    .map((a) => ({
+      id: a.id, name: a.name, time: typeof a.time === 'string' ? a.time : '',
+      rule: a.rule, enabled: a.enabled !== false, custom: !!a.custom,
+    }));
+}
+
+function saveState(storage, state) {
+  try {
+    storage.setItem(STORAGE_KEY, JSON.stringify({
+      activities: state.activities,
+      orientation: state.orientation,
+    }));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Returns { activities, orientation }; falls back to defaults on missing or corrupt data.
+function loadState(storage) {
+  const fallback = { activities: defaultActivities(), orientation: 'portrait' };
+  try {
+    const raw = storage.getItem(STORAGE_KEY);
+    if (!raw) return fallback;
+    const data = JSON.parse(raw);
+    if (!data || !Array.isArray(data.activities)) return fallback;
+    return {
+      activities: sanitize(data.activities),
+      orientation: data.orientation === 'landscape' ? 'landscape' : 'portrait',
+    };
+  } catch (e) {
+    return fallback;
+  }
+}
+
+// Parse "2027-03-05, 2027-03-19" (commas, spaces or newlines) into unique valid ISO dates.
+function parseDateList(text) {
+  const out = new Set();
+  for (const part of String(text || '').split(/[\s,;]+/)) {
+    const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(part);
+    if (!m) continue;
+    const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
+    const dt = new Date(y, mo - 1, d);
+    if (dt.getFullYear() === y && dt.getMonth() === mo - 1 && dt.getDate() === d) {
+      out.add(`${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+    }
+  }
+  return [...out].sort();
+}
+
+// UI: month picker, activity checklist, live large-print preview and print view.
+
+
+function nextMonth(now) {
+  return new Date(now.getFullYear(), now.getMonth() + 1, 1);
+}
+
+function safeStorage() {
+  try {
+    return window.localStorage;
+  } catch (e) {
+    return { getItem: () => null, setItem: () => {} };
+  }
+}
+
+function init() {
+  const storage = safeStorage();
+  const saved = loadState(storage);
+  const target = nextMonth(new Date());
+  const state = {
+    year: target.getFullYear(),
+    month: target.getMonth(),
+    activities: saved.activities,
+    orientation: saved.orientation,
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const monthSelect = $('month-select');
+  const yearInput = $('year-input');
+  const list = $('activity-list');
+  const paper = $('paper');
+  const pageStyle = document.createElement('style');
+  document.head.appendChild(pageStyle);
+
+  monthSelect.innerHTML = MONTH_NAMES.map((n, i) => `<option value="${i}">${n}</option>`).join('');
+
+  function persist() {
+    saveState(storage, state);
+  }
+
+  function renderPreview() {
+    const model = buildMonthModel(state.year, state.month, state.activities);
+    paper.className = `paper ${state.orientation}`;
+    paper.innerHTML = renderMonthHtml(model);
+    pageStyle.textContent = `@page { size: letter ${state.orientation}; margin: 0.4in; }`;
+    document.title = `${model.title} Activity Calendar — CalmCalendar`;
+  }
+
+  function ruleControls(act) {
+    const r = act.rule;
+    if (r.type === 'weekly') {
+      return `<div class="rule-body" role="group" aria-label="Weekdays">` + WEEKDAY_SHORT.map((d, i) =>
+        `<label class="chip"><input type="checkbox" data-field="weekday" data-weekday="${i}"` +
+        `${r.days.includes(i) ? ' checked' : ''}><span>${d}</span></label>`).join('') + '</div>';
+    }
+    if (r.type === 'monthly') {
+      const nths = [1, 2, 3, 4, -1].map((n) =>
+        `<option value="${n}"${r.nth === n ? ' selected' : ''}>${ORDINALS[n]}</option>`).join('');
+      const wds = WEEKDAY_SHORT.map((d, i) =>
+        `<option value="${i}"${r.weekday === i ? ' selected' : ''}>${d}</option>`).join('');
+      return `<div class="rule-body"><select data-field="nth" aria-label="Which week">${nths}</select>` +
+        `<select data-field="monthly-weekday" aria-label="Weekday">${wds}</select><span>of every month</span></div>`;
+    }
+    return `<div class="rule-body"><input type="text" data-field="dates" value="${escapeHtml(r.dates.join(', '))}" ` +
+      `placeholder="2027-03-05, 2027-03-19" aria-label="Specific dates, year-month-day, separated by commas"></div>`;
+  }
+
+  function renderList() {
+    list.innerHTML = state.activities.map((a) => `
+      <div class="activity${a.enabled ? '' : ' off'}" data-id="${escapeHtml(a.id)}">
+        <div class="activity-top">
+          <label class="check"><input type="checkbox" data-field="enabled"${a.enabled ? ' checked' : ''} aria-label="Include ${escapeHtml(a.name)}"></label>
+          <input type="text" class="name" data-field="name" value="${escapeHtml(a.name)}" aria-label="Activity name">
+          <input type="text" class="time" data-field="time" value="${escapeHtml(a.time)}" aria-label="Time, for example 2:00 PM">
+          <button type="button" class="btn ghost small" data-action="delete" aria-label="Remove ${escapeHtml(a.name)}">Remove</button>
+        </div>
+        <div class="activity-rule">
+          <select data-field="type" aria-label="Repeats">
+            <option value="weekly"${a.rule.type === 'weekly' ? ' selected' : ''}>Every week on…</option>
+            <option value="monthly"${a.rule.type === 'monthly' ? ' selected' : ''}>Once a month on the…</option>
+            <option value="dates"${a.rule.type === 'dates' ? ' selected' : ''}>Specific dates</option>
+          </select>
+          ${ruleControls(a)}
+        </div>
+      </div>`).join('');
+  }
+
+  function change(id, changes) {
+    state.activities = updateActivity(state.activities, id, changes);
+    persist();
+    renderPreview();
+  }
+
+  list.addEventListener('input', (e) => {
+    const row = e.target.closest('.activity');
+    if (!row) return;
+    const id = row.dataset.id;
+    const act = state.activities.find((a) => a.id === id);
+    const field = e.target.dataset.field;
+    if (!act || !field) return;
+    if (field === 'name') change(id, { name: e.target.value });
+    else if (field === 'time') change(id, { time: e.target.value });
+    else if (field === 'enabled') {
+      row.classList.toggle('off', !e.target.checked);
+      change(id, { enabled: e.target.checked });
+    } else if (field === 'weekday') {
+      const day = Number(e.target.dataset.weekday);
+      const days = new Set(act.rule.days);
+      if (e.target.checked) days.add(day); else days.delete(day);
+      change(id, { rule: { type: 'weekly', days: [...days].sort() } });
+    } else if (field === 'nth') change(id, { rule: { ...act.rule, nth: Number(e.target.value) } });
+    else if (field === 'monthly-weekday') change(id, { rule: { ...act.rule, weekday: Number(e.target.value) } });
+    else if (field === 'dates') change(id, { rule: { type: 'dates', dates: parseDateList(e.target.value) } });
+    else if (field === 'type') {
+      const type = e.target.value;
+      const rule = type === 'weekly' ? { type, days: [1] }
+        : type === 'monthly' ? { type, nth: 1, weekday: 1 }
+        : { type, dates: [] };
+      change(id, { rule });
+      renderList();
+    }
+  });
+
+  list.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action="delete"]');
+    if (!btn) return;
+    state.activities = deleteActivity(state.activities, btn.closest('.activity').dataset.id);
+    persist();
+    renderList();
+    renderPreview();
+  });
+
+  $('add-activity').addEventListener('click', () => {
+    state.activities = createActivity(state.activities, { name: 'New activity' });
+    persist();
+    renderList();
+    renderPreview();
+    const names = list.querySelectorAll('input.name');
+    const last = names[names.length - 1];
+    last.scrollIntoView({ block: 'center' });
+    last.focus();
+    last.select();
+  });
+
+  $('reset-activities').addEventListener('click', () => {
+    if (!window.confirm('Reset all activities to the 12 defaults? Your custom activities will be removed.')) return;
+    state.activities = defaultActivities();
+    persist();
+    renderList();
+    renderPreview();
+  });
+
+  monthSelect.addEventListener('change', () => {
+    state.month = Number(monthSelect.value);
+    renderPreview();
+  });
+  yearInput.addEventListener('input', () => {
+    const y = Number(yearInput.value);
+    if (Number.isInteger(y) && y >= 1900 && y <= 2200) {
+      state.year = y;
+      renderPreview();
+    }
+  });
+
+  document.querySelectorAll('input[name="orientation"]').forEach((radio) => {
+    radio.checked = radio.value === state.orientation;
+    radio.addEventListener('change', () => {
+      state.orientation = radio.value;
+      persist();
+      renderPreview();
+    });
+  });
+
+  $('print-btn').addEventListener('click', () => {
+    renderPreview();
+    window.print();
+  });
+
+  monthSelect.value = String(state.month);
+  yearInput.value = String(state.year);
+  renderList();
+  renderPreview();
+}
+
+if (typeof document !== 'undefined') init();
+
+})();
+</script>
+</body>
+</html>
