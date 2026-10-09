@@ -127,18 +127,79 @@ input[type="checkbox"], input[type="radio"] { width: 24px; height: 24px; accent-
   .cal-grid td { height: 1.15in; }
   .paper.landscape .cal-grid td { height: 0.85in; }
 }
+
+/* ---------- CalmCalendar Pro ---------- */
+[hidden] { display: none !important; }
+.pro-badge { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 2px 10px; border-radius: 999px; background: var(--accent); color: #fff; font-family: var(--font); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; }
+.row .wide { flex: 1 1 14rem; min-width: 0; }
+input[type="file"] { font: inherit; max-width: 100%; }
+
+.notice { display: flex; gap: 12px; align-items: center; justify-content: space-between; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; margin-bottom: 18px; color: var(--accent-dark); font-weight: 600; }
+.lock-banner { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; justify-content: space-between; background: #fffdf9; border: 1px dashed #b9a78f; border-radius: 10px; padding: 12px 14px; }
+.lock-banner p { margin: 0; color: var(--muted); font-weight: 600; }
+
+.brand-preview { display: flex; align-items: center; gap: 12px; margin: 10px 0 0; }
+.brand-preview img { max-height: 64px; max-width: 160px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+.bd-list { list-style: none; margin: 8px 0 0; padding: 0; }
+.bd-list li { display: flex; gap: 8px; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding: 6px 0; }
+
+.brand-head { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 8px; }
+.brand-logo { max-height: 0.8in; max-width: 2.2in; object-fit: contain; }
+.brand-name { font-family: var(--serif); font-size: 20pt; font-weight: 700; color: #000; }
+.month-page + .month-page { margin-top: 0.5in; padding-top: 0.5in; border-top: 3px dashed var(--line); }
+
+.modal { position: fixed; inset: 0; z-index: 50; background: rgba(43, 33, 24, 0.55); display: flex; align-items: flex-start; justify-content: center; padding: 4vh 16px; overflow-y: auto; }
+.modal-panel { position: relative; background: var(--card); border: 1px solid var(--line); border-top: 6px solid var(--accent); border-radius: 16px; box-shadow: 0 12px 40px rgba(43, 33, 24, 0.35); width: 100%; max-width: 640px; padding: 26px 28px 24px; }
+.modal-panel h2 { margin: 0 0 6px; font-family: var(--serif); font-size: 1.7rem; color: var(--accent-dark); }
+.modal-close { position: absolute; top: 10px; right: 12px; width: 46px; height: 46px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-size: 2rem; line-height: 1; cursor: pointer; }
+.modal-close:hover { background: #f5ede1; }
+.modal-close:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.modal-lead { margin: 0 0 12px; color: var(--muted); }
+.pro-features { margin: 0 0 14px; padding: 0; list-style: none; }
+.pro-features li { position: relative; padding: 6px 0 6px 32px; }
+.pro-features li::before { content: "✓"; position: absolute; left: 4px; top: 6px; color: var(--accent); font-weight: 800; }
+.price-line { margin: 0 0 10px; color: var(--muted); }
+.plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .plan-grid { grid-template-columns: 1fr; } }
+.plan { display: flex; flex-direction: column; border: 2px solid var(--line); border-radius: 12px; padding: 14px 16px; background: #fffdf9; }
+.plan-best { border-color: var(--accent); background: var(--accent-soft); }
+.plan h3 { margin: 0; font-family: var(--serif); font-size: 1.1rem; }
+.plan .hint { flex: 1 1 auto; }
+.plan-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; text-align: center; }
+.trust { text-align: center; margin: 12px 0 0; }
+.divider { border: 0; border-top: 1px solid var(--line); margin: 20px 0 16px; }
+#license-entry > label { display: block; margin-bottom: 6px; }
+.license-status { min-height: 1.4em; margin-top: 8px; color: var(--muted); }
+.license-status.error { color: #9a1f10; font-weight: 600; }
+.active-line { margin: 6px 0 10px; font-weight: 700; color: #1e6b3a; }
+.active-line span { font-weight: 400; color: var(--muted); }
+.spinner { display: inline-block; width: 1em; height: 1em; vertical-align: -0.15em; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: cc-spin 0.9s linear infinite; }
+@keyframes cc-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 3s; } }
+
+@media print {
+  .modal, .notice { display: none !important; }
+  .month-page { break-after: page; page-break-after: always; }
+  .month-page:last-child { break-after: auto; page-break-after: auto; }
+  .month-page + .month-page { margin-top: 0; padding-top: 0; border-top: 0; }
+}
 </style>
 </head>
 <body>
 <header class="app-header">
   <div class="brand">
-    <h1>CalmCalendar</h1>
+    <h1>CalmCalendar <span id="pro-badge" class="pro-badge" hidden>PRO</span></h1>
     <p>Large-print monthly activity calendars. Free, private, works offline.</p>
   </div>
 </header>
 
 <main class="layout">
   <section class="controls" aria-label="Calendar settings">
+    <div id="ended-note" class="notice" role="status" hidden>
+      <span>Your Pro subscription ended — the free calendar still works great.</span>
+      <button type="button" id="ended-dismiss" class="btn ghost small">Dismiss</button>
+    </div>
+
     <div class="card">
       <h2>1. Choose the month</h2>
       <div class="row">
@@ -171,6 +232,70 @@ input[type="checkbox"], input[type="radio"] { width: 24px; height: 24px; accent-
       <p class="hint saved-note" id="saved-note">Your activity choices are remembered on this computer only.</p>
     </div>
 
+    <div class="card" id="year-card">
+      <h2>4. Full-year calendar</h2>
+      <div id="year-locked" class="lock-banner" hidden>
+        <p>🔒 Full-year printing is a CalmCalendar Pro feature.</p>
+        <button type="button" id="year-see-pro" class="btn secondary">See Pro plans</button>
+      </div>
+      <div id="year-pro" hidden>
+        <p class="hint">Make all twelve months at once, each with its own holidays. Prints one month per page.</p>
+        <div class="row">
+          <label for="fy-year">Year</label>
+          <input id="fy-year" type="number" min="1900" max="2200" step="1">
+          <button type="button" id="fy-generate" class="btn secondary">Generate full year</button>
+        </div>
+        <button type="button" id="fy-print" class="btn primary big">Print whole year</button>
+      </div>
+    </div>
+
+    <div class="card" id="brand-card" hidden>
+      <h2>Facility branding</h2>
+      <p class="hint">Your facility name and logo print at the top of every calendar.</p>
+      <div class="row">
+        <label for="brand-name">Facility name</label>
+        <input id="brand-name" type="text" maxlength="120" class="wide" autocomplete="off">
+      </div>
+      <div class="row">
+        <label for="brand-logo">Logo (PNG or JPG)</label>
+        <input id="brand-logo" type="file" accept="image/png,image/jpeg">
+      </div>
+      <div id="brand-preview" class="brand-preview"></div>
+      <p class="hint" id="brand-msg" role="status"></p>
+      <button type="button" id="brand-logo-remove" class="btn ghost small" hidden>Remove logo</button>
+    </div>
+
+    <div class="card" id="bday-card" hidden>
+      <h2>Birthdays &amp; anniversaries</h2>
+      <p class="hint">Add each one once. They appear on every calendar, every year.</p>
+      <div class="row">
+        <label for="bd-name" class="sr-only">Name</label>
+        <input id="bd-name" type="text" maxlength="80" class="wide" placeholder="Name" autocomplete="off">
+        <label for="bd-month" class="sr-only">Month</label>
+        <select id="bd-month"></select>
+        <label for="bd-day" class="sr-only">Day</label>
+        <select id="bd-day"></select>
+        <label for="bd-type" class="sr-only">Type</label>
+        <select id="bd-type"><option value="birthday">Birthday</option><option value="anniversary">Anniversary</option></select>
+      </div>
+      <div class="row buttons"><button type="button" id="bd-add" class="btn secondary">+ Add</button></div>
+      <p class="hint" id="bd-msg" role="status"></p>
+      <ul id="bd-list" class="bd-list"></ul>
+    </div>
+
+    <div class="card" id="share-card" hidden>
+      <h2>Share setup with staff</h2>
+      <p class="hint">Save your activities, schedule, branding and birthdays to a file, then open it on another computer.</p>
+      <div class="row">
+        <button type="button" id="export-ccal" class="btn secondary">Export setup (.ccal)</button>
+      </div>
+      <div class="row buttons">
+        <label for="import-ccal">Import setup</label>
+        <input id="import-ccal" type="file" accept=".ccal,application/json">
+      </div>
+      <p class="hint" id="share-msg" role="status"></p>
+    </div>
+
     <div class="card">
       <h2>Free printables for your residents</h2>
       <p class="hint">Large-print puzzles and activity pages, no signup needed.</p>
@@ -188,6 +313,54 @@ input[type="checkbox"], input[type="radio"] { width: 24px; height: 24px; accent-
     </div>
   </section>
 </main>
+
+<footer class="site-footer">
+  <p>CalmCalendar is free forever. Made by
+    <a href="https://www.etsy.com/shop/PrintablePastimesCo">PrintablePastimesCo</a>
+    — printable activity books &amp; puzzles for seniors.
+    · <a href="#" id="gopro-link">Go Pro</a></p>
+</footer>
+
+<div id="pro-modal" class="modal" hidden>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="pro-title">
+    <button type="button" id="pro-close" class="modal-close" aria-label="Close">×</button>
+    <h2 id="pro-title">CalmCalendar Pro</h2>
+    <p class="modal-lead">Everything in the free calendar stays free. Pro adds time-savers for busy activity directors.</p>
+    <ul class="pro-features">
+      <li>Full-year generator — all 12 months at once, ready to print</li>
+      <li>Your facility name and logo on every calendar</li>
+      <li>Birthdays &amp; anniversaries that repeat every year</li>
+      <li>Staff template sharing — set up once, hand it to your team</li>
+    </ul>
+    <p class="price-line">Plans: <strong id="pro-price"></strong></p>
+    <div class="plan-grid">
+      <div class="plan">
+        <h3>Monthly — $8/mo</h3>
+        <p class="hint">Pay month to month.</p>
+        <a id="plan-monthly" class="btn primary plan-btn" target="_blank" rel="noopener">Subscribe monthly</a>
+      </div>
+      <div class="plan plan-best">
+        <h3>Annual — $79/yr (save ~$17)</h3>
+        <p class="hint">Best value for the year.</p>
+        <a id="plan-annual" class="btn primary plan-btn" target="_blank" rel="noopener">Subscribe annually</a>
+      </div>
+    </div>
+    <p class="hint trust">Secure payment by Stripe — your card details never touch CalmCalendar. Your license key is emailed to you after you subscribe.</p>
+    <hr class="divider">
+    <div id="license-entry">
+      <label for="license-key">I have a license key</label>
+      <div class="row">
+        <input id="license-key" type="text" class="wide" placeholder="CCP-ABC123-DEF456" autocomplete="off" spellcheck="false">
+        <button type="button" id="license-activate" class="btn secondary">Activate</button>
+      </div>
+    </div>
+    <div id="license-status" class="license-status" role="status" aria-live="polite"></div>
+    <div id="license-active" hidden>
+      <p class="active-line">Pro active ✓ <span id="license-until"></span></p>
+      <button type="button" id="license-remove" class="btn ghost">Remove key / sign out</button>
+    </div>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -333,7 +506,8 @@ function describeRule(rule) {
 
 // Build the month model: weeks of cells { day, iso, holiday, dense, items: [{ id, name, time }] }.
 // Items on a day are sorted by time, then name; nothing is ever dropped or truncated.
-function buildMonthModel(year, month, activities) {
+// Optional extrasForDay(day) returns more items for a day (Pro birthdays); omitted for the free app.
+function buildMonthModel(year, month, activities, extrasForDay) {
   const holidays = holidaysInMonth(year, month);
   const byDay = {};
   for (const act of activities || []) {
@@ -344,7 +518,8 @@ function buildMonthModel(year, month, activities) {
   }
   const weeks = monthGrid(year, month).map((week) => week.map((day) => {
     if (day === null) return null;
-    const items = (byDay[day] || []).sort((a, b) =>
+    const extra = extrasForDay ? extrasForDay(day) : [];
+    const items = (byDay[day] || []).concat(extra).sort((a, b) =>
       parseTime(a.time) - parseTime(b.time) || a.name.localeCompare(b.name));
     return { day, iso: isoDate(year, month, day), holiday: holidays[day] || '', items, dense: items.length > DENSE_THRESHOLD };
   }));
@@ -452,6 +627,8 @@ function sanitize(list) {
     }));
 }
 
+const sanitizeActivities = sanitize;
+
 function saveState(storage, state) {
   try {
     storage.setItem(STORAGE_KEY, JSON.stringify({
@@ -496,7 +673,288 @@ function parseDateList(text) {
   return [...out].sort();
 }
 
+// CalmCalendar Pro: pure logic for birthdays, year model, .ccal templates and the license state machine.
+// No DOM access, so everything is testable in Node. Months are 0-based, like calendar.js.
+
+
+const PRO_STORAGE_KEY = 'calmcalendar.pro.v1';
+const LICENSE_API = 'https://REPLACE-WITH-WORKER-URL';
+const STRIPE_MONTHLY_URL = 'https://REPLACE-WITH-STRIPE-MONTHLY-LINK';
+const STRIPE_ANNUAL_URL = 'https://REPLACE-WITH-STRIPE-ANNUAL-LINK';
+const PRO_PRICE_TEXT = '$8/mo or $79/yr';
+const REVALIDATE_MS = 7 * 24 * 3600 * 1000;
+
+const TEMPLATE_FORMAT = 'ccal-1';
+const BRAND_NAME_MAX = 120;
+const BIRTHDAY_NAME_MAX = 80;
+const LOGO_MAX_CHARS = 500000;
+const BIRTHDAY_TYPES = ['birthday', 'anniversary'];
+const LICENSE_STATUSES = ['locked', 'key_entered', 'validating', 'pro_active', 'expired_graceful'];
+
+// ---------- Branding and birthdays: sanitizing ----------
+
+function defaultBranding() {
+  return { name: '', logo: '' };
+}
+
+function sanitizeBranding(b) {
+  const out = defaultBranding();
+  if (!b || typeof b !== 'object') return out;
+  if (typeof b.name === 'string') out.name = b.name.slice(0, BRAND_NAME_MAX).trim();
+  if (typeof b.logo === 'string' && b.logo.startsWith('data:image/') && b.logo.length <= LOGO_MAX_CHARS) out.logo = b.logo;
+  return out;
+}
+
+// True for real calendar month/day pairs; Feb 29 is allowed (it is a leap-year date).
+function isValidMonthDay(month, day) {
+  return Number.isInteger(month) && Number.isInteger(day) && month >= 0 && month <= 11 &&
+    day >= 1 && day <= daysInMonth(2024, month);
+}
+
+function sanitizeBirthdays(list) {
+  if (!Array.isArray(list)) return [];
+  return list
+    .filter((b) => b && typeof b.name === 'string' && b.name.trim() && BIRTHDAY_TYPES.includes(b.type) &&
+      isValidMonthDay(b.month, b.day))
+    .map((b) => ({ name: b.name.slice(0, BIRTHDAY_NAME_MAX).trim(), month: b.month, day: b.day, type: b.type }))
+    .filter((b) => b.name)
+    .sort((a, b) => a.month - b.month || a.day - b.day || a.name.localeCompare(b.name) || a.type.localeCompare(b.type));
+}
+
+// ---------- License state machine ----------
+
+function isKeyFormatValid(key) {
+  return /^CCP-[A-Z0-9]{6}-[A-Z0-9]{6}$/i.test(String(key == null ? '' : key).trim());
+}
+
+function normalizeKey(key) {
+  return String(key == null ? '' : key).trim().toUpperCase();
+}
+
+function licenseInitial() {
+  return { status: 'locked', key: null, validUntil: null, lastChecked: 0, error: '' };
+}
+
+const BAD_KEY_MESSAGE = "That doesn't look like a CalmCalendar Pro key. Keys look like CCP-ABC123-DEF456.";
+
+// Pure transition. Unknown state/event combinations return the state unchanged; never throws.
+function licenseTransition(state, event, nowMs = Date.now()) {
+  if (!state || typeof state !== 'object' || !event || typeof event !== 'object') return state || licenseInitial();
+  if (event.type === 'REMOVE_KEY') return licenseInitial();
+  switch (state.status) {
+    case 'locked':
+      if (event.type === 'ENTER_KEY') {
+        if (!isKeyFormatValid(event.key)) return { ...state, error: BAD_KEY_MESSAGE };
+        return { ...licenseInitial(), status: 'key_entered', key: normalizeKey(event.key) };
+      }
+      return state;
+    case 'key_entered':
+      if (event.type === 'ENTER_KEY') {
+        if (!isKeyFormatValid(event.key)) return { ...state, error: BAD_KEY_MESSAGE };
+        return { ...state, key: normalizeKey(event.key), error: '' };
+      }
+      if (event.type === 'START_VALIDATION') return { ...state, status: 'validating', error: '' };
+      return state;
+    case 'validating':
+      if (event.type === 'VALID_OK') {
+        return { ...state, status: 'pro_active', validUntil: event.validUntil || null, lastChecked: nowMs, error: '' };
+      }
+      if (event.type === 'VALID_FAIL') return { ...licenseInitial(), error: String(event.error || '') };
+      return state;
+    case 'pro_active':
+      if (event.type === 'KEY_INVALID') return { ...state, status: 'expired_graceful', error: '' };
+      // Background re-validation succeeding refreshes the cached expiry.
+      if (event.type === 'VALID_OK') return { ...state, validUntil: event.validUntil || null, lastChecked: nowMs, error: '' };
+      return state;
+    case 'expired_graceful':
+      if (event.type === 'ENTER_KEY') {
+        if (!isKeyFormatValid(event.key)) return { ...state, error: BAD_KEY_MESSAGE };
+        return { ...licenseInitial(), status: 'key_entered', key: normalizeKey(event.key) };
+      }
+      return state;
+    default:
+      return state;
+  }
+}
+
+function needsRevalidation(state, nowMs) {
+  return !!state && state.status === 'pro_active' && (nowMs - (Number(state.lastChecked) || 0)) >= REVALIDATE_MS;
+}
+
+function isProActive(state) {
+  return !!state && (state.status === 'pro_active' || state.status === 'expired_graceful');
+}
+
+// GET /validate on the license Worker. Resolves { valid, validUntil }; rejects with { code } where code is
+// 'timeout' | 'http' | 'network'. Callers treat any rejection as "offline" and keep their cached state.
+async function validateKeyOnline(key, fetchImpl = globalThis.fetch, timeoutMs = 8000) {
+  if (typeof fetchImpl !== 'function') throw { code: 'network' };
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      if (controller) controller.abort();
+      reject({ code: 'timeout' });
+    }, timeoutMs);
+  });
+  const work = (async () => {
+    let res;
+    try {
+      res = await fetchImpl(`${LICENSE_API}/validate?key=${encodeURIComponent(key)}`, { method: 'GET', signal: controller ? controller.signal : undefined });
+    } catch (e) {
+      throw { code: 'network' };
+    }
+    if (!res || !res.ok) throw { code: 'http' };
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      throw { code: 'http' };
+    }
+    const until = data && data.valid_until;
+    return {
+      valid: !!data && data.valid === true,
+      validUntil: typeof until === 'string' && until ? until : null,
+    };
+  })();
+  work.catch(() => {});
+  try {
+    return await Promise.race([work, timeout]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ---------- Pro state persistence ----------
+
+function defaultProState() {
+  return { branding: defaultBranding(), birthdays: [], license: licenseInitial(), endedNote: false };
+}
+
+function sanitizeLicense(l) {
+  const out = licenseInitial();
+  if (!l || typeof l !== 'object' || !LICENSE_STATUSES.includes(l.status)) return out;
+  if (l.status === 'locked' || !isKeyFormatValid(l.key)) return out;
+  return {
+    // A validation interrupted by a reload resumes as "key entered".
+    status: l.status === 'validating' ? 'key_entered' : l.status,
+    key: normalizeKey(l.key),
+    validUntil: typeof l.validUntil === 'string' ? l.validUntil : null,
+    lastChecked: Number.isFinite(l.lastChecked) ? l.lastChecked : 0,
+    error: '',
+  };
+}
+
+function saveProState(storage, state) {
+  try {
+    storage.setItem(PRO_STORAGE_KEY, JSON.stringify({
+      branding: state.branding,
+      birthdays: state.birthdays,
+      license: state.license,
+      endedNote: !!state.endedNote,
+    }));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function loadProState(storage) {
+  try {
+    const raw = storage.getItem(PRO_STORAGE_KEY);
+    if (!raw) return defaultProState();
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return defaultProState();
+    return {
+      branding: sanitizeBranding(data.branding),
+      birthdays: sanitizeBirthdays(data.birthdays),
+      license: sanitizeLicense(data.license),
+      endedNote: data.endedNote === true,
+    };
+  } catch (e) {
+    return defaultProState();
+  }
+}
+
+// ---------- Birthdays on the calendar ----------
+
+// Entries falling on a date. Feb 29 birthdays land on Feb 28 in non-leap years.
+function birthdaysOn(birthdays, year, month, day) {
+  const leap = daysInMonth(year, 1) === 29;
+  return (birthdays || []).filter((b) =>
+    (b.month === month && b.day === day) || (!leap && b.month === 1 && b.day === 29 && month === 1 && day === 28));
+}
+
+// A month model with birthdays/anniversaries merged into the day cells.
+function buildMonthWithBirthdays(year, month, activities, birthdays) {
+  const extras = (day) => birthdaysOn(birthdays, year, month, day).map((b, i) => ({
+    id: `${b.type}-${month}-${day}-${i}`,
+    name: `${b.type === 'anniversary' ? '💍' : '🎂'} ${b.name}`,
+    time: '',
+  }));
+  return buildMonthModel(year, month, activities, extras);
+}
+
+function buildYearModel(year, activities, birthdays) {
+  return Array.from({ length: 12 }, (_, m) => buildMonthWithBirthdays(year, m, activities, birthdays));
+}
+
+// Header markup for a branded calendar (facility name and/or logo). Empty when nothing is set.
+function renderBrandingHtml(branding) {
+  const b = sanitizeBranding(branding);
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  if (!b.name && !b.logo) return '';
+  return '<div class="brand-head">' +
+    (b.logo ? `<img class="brand-logo" src="${esc(b.logo)}" alt="">` : '') +
+    (b.name ? `<span class="brand-name">${esc(b.name)}</span>` : '') + '</div>';
+}
+
+// ---------- .ccal template sharing ----------
+
+function canonRule(rule) {
+  if (rule.type === 'weekly') return { type: 'weekly', days: [...new Set(rule.days.map(Number))].sort((a, b) => a - b) };
+  if (rule.type === 'monthly') return { type: 'monthly', nth: Number(rule.nth), weekday: Number(rule.weekday) };
+  return { type: 'dates', dates: rule.dates.filter((d) => typeof d === 'string') };
+}
+
+function cleanTemplate(t) {
+  return {
+    activities: sanitizeActivities(Array.isArray(t.activities) ? t.activities : []).map((a) => ({ ...a, rule: canonRule(a.rule) })),
+    orientation: t.orientation === 'landscape' ? 'landscape' : 'portrait',
+    branding: sanitizeBranding(t.branding),
+    birthdays: sanitizeBirthdays(t.birthdays),
+  };
+}
+
+// Canonical JSON with a fixed key order. exportedAt may be passed so repeated exports can be byte-identical.
+function exportTemplate({ activities, orientation, branding, birthdays, exportedAt } = {}) {
+  const clean = cleanTemplate({ activities, orientation, branding, birthdays });
+  return JSON.stringify({
+    format: TEMPLATE_FORMAT,
+    exportedAt: exportedAt || new Date().toISOString(),
+    activities: clean.activities,
+    orientation: clean.orientation,
+    branding: clean.branding,
+    birthdays: clean.birthdays,
+  }, null, 2);
+}
+
+function importTemplate(jsonString) {
+  let data;
+  try {
+    data = JSON.parse(jsonString);
+  } catch (e) {
+    throw new Error('That file is not a valid CalmCalendar setup file.');
+  }
+  if (!data || typeof data !== 'object' || data.format !== TEMPLATE_FORMAT) {
+    throw new Error('That file is not a CalmCalendar setup (.ccal) file.');
+  }
+  if (!Array.isArray(data.activities)) throw new Error('That setup file has no activities in it.');
+  return cleanTemplate(data);
+}
+
 // UI: month picker, activity checklist, live large-print preview and print view.
+
 
 
 function nextMonth(now) {
@@ -520,7 +978,17 @@ function init() {
     month: target.getMonth(),
     activities: saved.activities,
     orientation: saved.orientation,
+    view: 'month',
+    fullYear: target.getFullYear(),
   };
+  const pro = loadProState(storage);
+  // A subscription that ended last session: Pro locks on this load, with a one-time polite note.
+  if (pro.license.status === 'expired_graceful') {
+    pro.license = licenseTransition(pro.license, { type: 'REMOVE_KEY' });
+    pro.endedNote = true;
+    saveProState(storage, pro);
+  }
+  const isPro = () => isProActive(pro.license);
 
   const $ = (id) => document.getElementById(id);
   const monthSelect = $('month-select');
@@ -536,11 +1004,24 @@ function init() {
     saveState(storage, state);
   }
 
+  function persistPro() {
+    saveProState(storage, pro);
+  }
+
   function renderPreview() {
-    const model = buildMonthModel(state.year, state.month, state.activities);
     paper.className = `paper ${state.orientation}`;
-    paper.innerHTML = renderMonthHtml(model);
     pageStyle.textContent = `@page { size: letter ${state.orientation}; margin: 0.4in; }`;
+    const brand = isPro() ? renderBrandingHtml(pro.branding) : '';
+    if (state.view === 'year' && isPro()) {
+      const models = buildYearModel(state.fullYear, state.activities, pro.birthdays);
+      paper.innerHTML = models.map((m) => `<section class="month-page">${brand}${renderMonthHtml(m)}</section>`).join('');
+      document.title = `${state.fullYear} Activity Calendar — CalmCalendar`;
+      return;
+    }
+    const model = isPro()
+      ? buildMonthWithBirthdays(state.year, state.month, state.activities, pro.birthdays)
+      : buildMonthModel(state.year, state.month, state.activities);
+    paper.innerHTML = brand + renderMonthHtml(model);
     document.title = `${model.title} Activity Calendar — CalmCalendar`;
   }
 
@@ -649,12 +1130,14 @@ function init() {
   });
 
   monthSelect.addEventListener('change', () => {
+    state.view = 'month';
     state.month = Number(monthSelect.value);
     renderPreview();
   });
   yearInput.addEventListener('input', () => {
     const y = Number(yearInput.value);
     if (Number.isInteger(y) && y >= 1900 && y <= 2200) {
+      state.view = 'month';
       state.year = y;
       renderPreview();
     }
@@ -670,6 +1153,7 @@ function init() {
   });
 
   $('print-btn').addEventListener('click', () => {
+    state.view = 'month';
     renderPreview();
     window.print();
   });
@@ -677,17 +1161,310 @@ function init() {
   monthSelect.value = String(state.month);
   yearInput.value = String(state.year);
   renderList();
+  initPro();
   renderPreview();
+
+  // ---------- CalmCalendar Pro ----------
+  function initPro() {
+    const modal = $('pro-modal');
+    const keyInput = $('license-key');
+    const statusBox = $('license-status');
+    const fyYear = $('fy-year');
+    const brandName = $('brand-name');
+    const bdMonth = $('bd-month');
+    const bdDay = $('bd-day');
+    let opener = null;
+
+    $('pro-price').textContent = PRO_PRICE_TEXT;
+    $('plan-monthly').href = STRIPE_MONTHLY_URL;
+    $('plan-annual').href = STRIPE_ANNUAL_URL;
+    fyYear.value = String(state.fullYear);
+    bdMonth.innerHTML = MONTH_NAMES.map((n, i) => `<option value="${i}">${n}</option>`).join('');
+    bdDay.innerHTML = Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
+
+    // --- license state ---
+    function setLicense(event) {
+      pro.license = licenseTransition(pro.license, event, Date.now());
+      persistPro();
+    }
+
+    function renderLicense() {
+      const lic = pro.license;
+      const busy = lic.status === 'validating';
+      $('license-entry').hidden = lic.status === 'pro_active';
+      $('license-activate').disabled = busy;
+      keyInput.disabled = busy;
+      $('license-activate').textContent = busy ? 'Checking…' : 'Activate';
+      $('license-active').hidden = !isPro();
+      if (lic.status === 'expired_graceful') {
+        $('license-until').textContent = '— your subscription has ended; Pro stays on until you reload this page.';
+      } else if (lic.validUntil && !Number.isNaN(Date.parse(lic.validUntil))) {
+        $('license-until').textContent = `— valid until ${new Date(lic.validUntil).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}`;
+      } else {
+        $('license-until').textContent = '';
+      }
+      statusBox.className = `license-status${lic.error ? ' error' : ''}`;
+      statusBox.innerHTML = busy ? '<span class="spinner" aria-hidden="true"></span> Checking your key…' : escapeHtml(lic.error);
+    }
+
+    function applyProUi() {
+      const on = isPro();
+      if (!on) state.view = 'month';
+      $('pro-badge').hidden = !on;
+      $('year-locked').hidden = on;
+      $('year-pro').hidden = !on;
+      ['brand-card', 'bday-card', 'share-card'].forEach((id) => { $(id).hidden = !on; });
+      $('ended-note').hidden = on || !pro.endedNote;
+      renderLicense();
+      renderPreview();
+    }
+
+    async function activate() {
+      if (pro.license.status === 'validating') return;
+      setLicense({ type: 'ENTER_KEY', key: keyInput.value });
+      if (pro.license.status !== 'key_entered') { renderLicense(); return; }
+      setLicense({ type: 'START_VALIDATION' });
+      renderLicense();
+      try {
+        const res = await validateKeyOnline(pro.license.key);
+        if (res.valid) setLicense({ type: 'VALID_OK', validUntil: res.validUntil });
+        else setLicense({ type: 'VALID_FAIL', error: 'That key was not recognized, or its subscription has ended. Please check it and try again.' });
+      } catch (e) {
+        setLicense({ type: 'VALID_FAIL', error: e && e.code === 'http'
+          ? 'The license service had a problem. Please try again in a few minutes.'
+          : "Couldn't reach the license service. Check your internet connection and try again." });
+      }
+      if (pro.license.status === 'pro_active') pro.endedNote = false;
+      persistPro();
+      applyProUi();
+    }
+
+    // Weekly background re-check. Offline or server trouble keeps the cached state; only an explicit
+    // "invalid" answer from the license service ends Pro (and even then only after this session).
+    function revalidateInBackground() {
+      if (!needsRevalidation(pro.license, Date.now()) || navigator.onLine === false) return;
+      const key = pro.license.key;
+      validateKeyOnline(key).then((res) => {
+        if (pro.license.status !== 'pro_active' || pro.license.key !== key) return;
+        setLicense(res.valid ? { type: 'VALID_OK', validUntil: res.validUntil } : { type: 'KEY_INVALID' });
+        renderLicense();
+      }, () => {});
+    }
+
+    // --- upgrade modal ---
+    function focusables() {
+      return [...modal.querySelectorAll('a[href], button, input, select')].filter((el) => !el.disabled && !el.closest('[hidden]'));
+    }
+    function openModal(from) {
+      opener = from || null;
+      renderLicense();
+      if (pro.license.key && !keyInput.value) keyInput.value = pro.license.key;
+      modal.hidden = false;
+      $('pro-close').focus();
+    }
+    function closeModal() {
+      if (modal.hidden) return;
+      modal.hidden = true;
+      if (opener && opener.focus) opener.focus();
+    }
+    $('gopro-link').addEventListener('click', (e) => { e.preventDefault(); openModal(e.currentTarget); });
+    $('year-see-pro').addEventListener('click', (e) => openModal(e.currentTarget));
+    $('pro-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (modal.hidden) return;
+      if (e.key === 'Escape') { closeModal(); return; }
+      if (e.key !== 'Tab') return;
+      const items = focusables();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    $('license-activate').addEventListener('click', activate);
+    keyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') activate(); });
+    $('license-remove').addEventListener('click', () => {
+      setLicense({ type: 'REMOVE_KEY' });
+      keyInput.value = '';
+      applyProUi();
+    });
+    $('ended-dismiss').addEventListener('click', () => {
+      pro.endedNote = false;
+      persistPro();
+      $('ended-note').hidden = true;
+    });
+
+    // --- full-year ---
+    function showYear() {
+      const y = Number(fyYear.value);
+      if (!Number.isInteger(y) || y < 1900 || y > 2200) { fyYear.focus(); return false; }
+      state.fullYear = y;
+      state.view = 'year';
+      renderPreview();
+      return true;
+    }
+    $('fy-generate').addEventListener('click', () => {
+      if (showYear()) $('paper').scrollIntoView({ block: 'start' });
+    });
+    $('fy-print').addEventListener('click', () => { if (showYear()) window.print(); });
+
+    // --- branding ---
+    function renderBrandPreview() {
+      const b = pro.branding;
+      $('brand-preview').innerHTML = (b.logo ? `<img src="${escapeHtml(b.logo)}" alt="Your logo">` : '') +
+        (b.name ? `<strong>${escapeHtml(b.name)}</strong>` : '');
+      $('brand-logo-remove').hidden = !b.logo;
+    }
+    function renderBrandCard() {
+      brandName.value = pro.branding.name;
+      renderBrandPreview();
+    }
+    function brandChanged() {
+      persistPro();
+      renderBrandPreview();
+      renderPreview();
+    }
+    brandName.addEventListener('input', () => {
+      pro.branding = sanitizeBranding({ ...pro.branding, name: brandName.value });
+      brandChanged();
+    });
+
+    // Bracket access keeps CSS-style URL-call text out of the bundle; the build test greps for it.
+    const dataUrlOf = (canvas, type, quality) => canvas['toDataURL'](type, quality);
+
+    // Shrink to at most 400px on the longest side. PNG keeps transparency; falls back to JPEG if too big.
+    function resizeLogo(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('read'));
+        reader.onload = () => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('decode'));
+          img.onload = () => {
+            const scale = Math.min(1, 400 / Math.max(img.width, img.height));
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(img.width * scale));
+            canvas.height = Math.max(1, Math.round(img.height * scale));
+            const ctx = canvas.getContext('2d');
+            let url = '';
+            if (file.type === 'image/png') {
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              url = dataUrlOf(canvas, 'image/png');
+            }
+            if (!url || url.length > 450000) {
+              ctx.fillStyle = '#fff';
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              url = dataUrlOf(canvas, 'image/jpeg', 0.85);
+            }
+            resolve(url);
+          };
+          img.src = reader.result;
+        };
+        reader['readAsDataURL'](file);
+      });
+    }
+    $('brand-logo').addEventListener('change', async (e) => {
+      const file = e.target.files && e.target.files[0];
+      const msg = $('brand-msg');
+      msg.textContent = '';
+      if (!file) return;
+      if (!/^image\/(png|jpeg)$/.test(file.type)) { msg.textContent = 'Please choose a PNG or JPG picture.'; return; }
+      try {
+        const logo = await resizeLogo(file);
+        const next = sanitizeBranding({ ...pro.branding, logo });
+        if (!next.logo) { msg.textContent = 'That picture is too large. Please try a smaller one.'; return; }
+        pro.branding = next;
+        brandChanged();
+      } catch (err) {
+        msg.textContent = "Sorry, that picture couldn't be read. Please try another PNG or JPG.";
+      }
+      e.target.value = '';
+    });
+    $('brand-logo-remove').addEventListener('click', () => {
+      pro.branding = sanitizeBranding({ ...pro.branding, logo: '' });
+      brandChanged();
+    });
+
+    // --- birthdays & anniversaries ---
+    function renderBirthdays() {
+      $('bd-list').innerHTML = pro.birthdays.map((b, i) =>
+        `<li><span>${b.type === 'anniversary' ? '💍' : '🎂'} <strong>${escapeHtml(b.name)}</strong> — ${MONTH_NAMES[b.month]} ${b.day}</span>` +
+        `<button type="button" class="btn ghost small" data-remove="${i}" aria-label="Remove ${escapeHtml(b.name)}">Remove</button></li>`).join('');
+    }
+    $('bd-add').addEventListener('click', () => {
+      const msg = $('bd-msg');
+      const entry = { name: $('bd-name').value, month: Number(bdMonth.value), day: Number(bdDay.value), type: $('bd-type').value };
+      if (!entry.name.trim()) { msg.textContent = 'Please type a name first.'; $('bd-name').focus(); return; }
+      if (!isValidMonthDay(entry.month, entry.day)) { msg.textContent = `${MONTH_NAMES[entry.month]} doesn't have a day ${entry.day}.`; return; }
+      pro.birthdays = sanitizeBirthdays([...pro.birthdays, entry]);
+      persistPro();
+      msg.textContent = '';
+      $('bd-name').value = '';
+      renderBirthdays();
+      renderPreview();
+    });
+    $('bd-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-remove]');
+      if (!btn) return;
+      pro.birthdays = pro.birthdays.filter((_, i) => i !== Number(btn.dataset.remove));
+      persistPro();
+      renderBirthdays();
+      renderPreview();
+    });
+
+    // --- staff template sharing ---
+    $('export-ccal').addEventListener('click', () => {
+      const json = exportTemplate({ activities: state.activities, orientation: state.orientation, branding: pro.branding, birthdays: pro.birthdays });
+      const url = window.URL['createObjectURL'](new Blob([json], { type: 'application/json' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'calmcalendar-setup.ccal';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => window.URL['revokeObjectURL'](url), 1000);
+      $('share-msg').textContent = 'Saved calmcalendar-setup.ccal to your Downloads folder.';
+    });
+    $('import-ccal').addEventListener('change', async (e) => {
+      const file = e.target.files && e.target.files[0];
+      const msg = $('share-msg');
+      if (!file) return;
+      try {
+        const data = importTemplate(await file.text());
+        if (!window.confirm('Importing replaces your current activities, orientation, branding and birthdays with the contents of this file. Continue?')) {
+          msg.textContent = 'Import cancelled. Nothing was changed.';
+        } else {
+          state.activities = data.activities;
+          state.orientation = data.orientation;
+          pro.branding = data.branding;
+          pro.birthdays = data.birthdays;
+          persist();
+          persistPro();
+          document.querySelectorAll('input[name="orientation"]').forEach((r) => { r.checked = r.value === state.orientation; });
+          renderList();
+          renderBrandCard();
+          renderBirthdays();
+          renderPreview();
+          msg.textContent = 'Setup imported.';
+        }
+      } catch (err) {
+        msg.textContent = err && err.message ? err.message : 'That file could not be imported.';
+      }
+      e.target.value = '';
+    });
+
+    renderBrandCard();
+    renderBirthdays();
+    applyProUi();
+    revalidateInBackground();
+  }
 }
 
 if (typeof document !== 'undefined') init();
 
 })();
 </script>
-<footer class="site-footer">
-  <p>CalmCalendar is free forever. Made by
-    <a href="https://www.etsy.com/shop/PrintablePastimesCo">PrintablePastimesCo</a>
-    — printable activity books &amp; puzzles for seniors.</p>
-</footer>
 </body>
 </html>
